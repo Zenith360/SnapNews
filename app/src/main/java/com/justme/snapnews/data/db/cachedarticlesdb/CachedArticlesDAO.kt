@@ -5,192 +5,192 @@ import androidx.room.Insert
 import androidx.room.Query
 
 @Dao
-interface TopDao{
+interface TopDao {
     @Query("SELECT * FROM top")
-    fun getAllCachedArticles() : MutableList<TopCategory>
+    fun getAllCachedArticles(): MutableList<TopCategory>
 
     @Insert
-    fun insertArticle(article : TopCategory)
+    fun insertArticle(article: TopCategory)
 
     @Query("DELETE FROM top")
     fun deleteAll()
 }
 
 @Dao
-interface BusinessDao{
+interface BusinessDao {
     @Query("SELECT * FROM business")
-    fun getAllCachedArticles() : MutableList<BusinessCategory>
+    fun getAllCachedArticles(): MutableList<BusinessCategory>
 
     @Insert
-    fun insertArticle(article : BusinessCategory)
+    fun insertArticle(article: BusinessCategory)
 
     @Query("DELETE FROM business")
     fun deleteAll()
 }
 
 @Dao
-interface TechnologyDao{
+interface TechnologyDao {
     @Query("SELECT * FROM technology")
-    fun getAllCachedArticles() : MutableList<TechnologyCategory>
+    fun getAllCachedArticles(): MutableList<TechnologyCategory>
 
     @Insert
-    fun insertArticle(article : TechnologyCategory)
+    fun insertArticle(article: TechnologyCategory)
 
     @Query("DELETE FROM technology")
     fun deleteAll()
 }
 
 @Dao
-interface ScienceDao{
+interface ScienceDao {
     @Query("SELECT * FROM science")
-    fun getAllCachedArticles() : MutableList<ScienceCategory>
+    fun getAllCachedArticles(): MutableList<ScienceCategory>
 
     @Insert
-    fun insertArticle(article : ScienceCategory)
+    fun insertArticle(article: ScienceCategory)
 
     @Query("DELETE FROM science")
     fun deleteAll()
 }
 
 @Dao
-interface CrimeDao{
+interface CrimeDao {
     @Query("SELECT * FROM crime")
-    fun getAllCachedArticles() : MutableList<CrimeCategory>
+    fun getAllCachedArticles(): MutableList<CrimeCategory>
 
     @Insert
-    fun insertArticle(article : CrimeCategory)
+    fun insertArticle(article: CrimeCategory)
 
     @Query("DELETE FROM crime")
     fun deleteAll()
 }
 
 @Dao
-interface DomesticDao{
+interface DomesticDao {
     @Query("SELECT * FROM domestic")
-    fun getAllCachedArticles() : MutableList<DomesticCategory>
+    fun getAllCachedArticles(): MutableList<DomesticCategory>
 
     @Insert
-    fun insertArticle(article : DomesticCategory)
+    fun insertArticle(article: DomesticCategory)
 
     @Query("DELETE FROM domestic")
     fun deleteAll()
 }
 
 @Dao
-interface EducationDao{
+interface EducationDao {
     @Query("SELECT * FROM education")
-    fun getAllCachedArticles() : MutableList<EducationCategory>
+    fun getAllCachedArticles(): MutableList<EducationCategory>
 
     @Insert
-    fun insertArticle(article : EducationCategory)
+    fun insertArticle(article: EducationCategory)
 
     @Query("DELETE FROM education")
     fun deleteAll()
 }
 
 @Dao
-interface EntertainmentDao{
+interface EntertainmentDao {
     @Query("SELECT * FROM entertainment")
-    fun getAllCachedArticles() : MutableList<EntertainmentCategory>
+    fun getAllCachedArticles(): MutableList<EntertainmentCategory>
 
     @Insert
-    fun insertArticle(article : EntertainmentCategory)
+    fun insertArticle(article: EntertainmentCategory)
 
     @Query("DELETE FROM entertainment")
     fun deleteAll()
 }
 
 @Dao
-interface EnvironmentDao{
+interface EnvironmentDao {
     @Query("SELECT * FROM environment")
-    fun getAllCachedArticles() : MutableList<EnvironmentCategory>
+    fun getAllCachedArticles(): MutableList<EnvironmentCategory>
 
     @Insert
-    fun insertArticle(article : EnvironmentCategory)
+    fun insertArticle(article: EnvironmentCategory)
 
     @Query("DELETE FROM environment")
     fun deleteAll()
 }
 
 @Dao
-interface FoodDao{
+interface FoodDao {
     @Query("SELECT * FROM food")
-    fun getAllCachedArticles() : MutableList<FoodCategory>
+    fun getAllCachedArticles(): MutableList<FoodCategory>
 
     @Insert
-    fun insertArticle(article : FoodCategory)
+    fun insertArticle(article: FoodCategory)
 
     @Query("DELETE FROM food")
     fun deleteAll()
 }
 
 @Dao
-interface HealthDao{
+interface HealthDao {
     @Query("SELECT * FROM health")
-    fun getAllCachedArticles() : MutableList<HealthCategory>
+    fun getAllCachedArticles(): MutableList<HealthCategory>
 
     @Insert
-    fun insertArticle(article : HealthCategory)
+    fun insertArticle(article: HealthCategory)
 
     @Query("DELETE FROM health")
     fun deleteAll()
 }
 
 @Dao
-interface OtherDao{
+interface OtherDao {
     @Query("SELECT * FROM other")
-    fun getAllCachedArticles() : MutableList<OtherCategory>
+    fun getAllCachedArticles(): MutableList<OtherCategory>
 
     @Insert
-    fun insertArticle(article : OtherCategory)
+    fun insertArticle(article: OtherCategory)
 
     @Query("DELETE FROM other")
     fun deleteAll()
 }
 
 @Dao
-interface PoliticsDao{
+interface PoliticsDao {
     @Query("SELECT * FROM politics")
-    fun getAllCachedArticles() : MutableList<PoliticsCategory>
+    fun getAllCachedArticles(): MutableList<PoliticsCategory>
 
     @Insert
-    fun insertArticle(article : PoliticsCategory)
+    fun insertArticle(article: PoliticsCategory)
 
     @Query("DELETE FROM politics")
     fun deleteAll()
 }
 
 @Dao
-interface SportsDao{
+interface SportsDao {
     @Query("SELECT * FROM sports")
-    fun getAllCachedArticles() : MutableList<SportsCategory>
+    fun getAllCachedArticles(): MutableList<SportsCategory>
 
     @Insert
-    fun insertArticle(article : SportsCategory)
+    fun insertArticle(article: SportsCategory)
 
     @Query("DELETE FROM sports")
     fun deleteAll()
 }
 
 @Dao
-interface TourismDao{
+interface TourismDao {
     @Query("SELECT * FROM tourism")
-    fun getAllCachedArticles() : MutableList<TourismCategory>
+    fun getAllCachedArticles(): MutableList<TourismCategory>
 
     @Insert
-    fun insertArticle(article : TourismCategory)
+    fun insertArticle(article: TourismCategory)
 
     @Query("DELETE FROM tourism")
     fun deleteAll()
 }
 
 @Dao
-interface WorldDao{
+interface WorldDao {
     @Query("SELECT * FROM world")
-    fun getAllCachedArticles() : MutableList<WorldCategory>
+    fun getAllCachedArticles(): MutableList<WorldCategory>
 
     @Insert
-    fun insertArticle(article : WorldCategory)
+    fun insertArticle(article: WorldCategory)
 
     @Query("DELETE FROM world")
     fun deleteAll()
