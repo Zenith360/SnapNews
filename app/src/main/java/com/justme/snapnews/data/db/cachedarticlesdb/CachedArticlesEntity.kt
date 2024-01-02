@@ -3,7 +3,6 @@ package com.justme.snapnews.data.db.cachedarticlesdb
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.justme.snapnews.data.models.NewsItem
 
 @Entity(tableName = "top")
 data class TopCategory(
