@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">SnapNews</string>
+    <string name="snapnews">SnapNews</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="placeholder_headline">Headline</string>
+    <string name="placeholder_description">Description</string>
+    <string name="placeholder_top_ten">Your top 10 articles!</string>
+    <string name="placeholder_filter">Filter</string>
+    <string name="news_for_the_day">News for the day!</string>
+    <string name="filter_btn_top">Top</string>
+    <string name="filter_btn_business">Business</string>
+    <string name="filter_btn_crime">Crime</string>
+    <string name="filter_btn_domestic">Domestic</string>
+    <string name="filter_btn_education">Education</string>
+    <string name="filter_btn_entertainment">Entertainment</string>
+    <string name="filter_btn_food">Food</string>
+    <string name="filter_btn_health">Health</string>
+    <string name="filter_btn_other">Other</string>
+    <string name="filter_btn_politics">Politics</string>
+    <string name="filter_btn_science">Science</string>
+    <string name="filter_btn_sports">Sports</string>
+    <string name="filter_btn_technology">Technology</string>
+    <string name="filter_btn_tourism">Tourism</string>
+    <string name="filter_btn_world">World</string>
+    <string name="filter_btn_environment">Environment</string>
+</resources>
