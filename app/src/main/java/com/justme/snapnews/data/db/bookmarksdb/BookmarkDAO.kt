@@ -7,7 +7,6 @@ import androidx.room.Query
 
 @Dao
 interface BookmarkDAO {
-
     @Insert
     fun insertInBookmarks(bookmarkEntity: BookmarkEntity)
 
@@ -16,7 +15,4 @@ interface BookmarkDAO {
 
     @Delete
     fun deleteFromBookmarks(bookmarkEntity: BookmarkEntity)
-
-    @Query("UPDATE bookmarks SET isBookmarked = :isBookmarked WHERE article_id = :artId")
-    fun getBookmarkById(isBookmarked : Boolean, artId : String) : BookmarkEntity
 }
