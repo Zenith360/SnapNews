@@ -25,7 +25,6 @@ import com.android.volley.toolbox.Volley
 import com.justme.snapnews.R
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDB
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDao
-import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesEntity
 import com.justme.snapnews.data.models.NewsItem
 import com.justme.snapnews.ui.adapters.DashboardRecyclerAdapter
 import com.justme.snapnews.util.converterToCachedArticlesEntity
@@ -193,13 +192,14 @@ class DashboardFragment : Fragment() {
         return minutesBetween >= 60
     }
 
-    private fun buttonHandler(btn: Button, selectedFilterBtn: Button, queue: RequestQueue) {
-        if (selectedFilterBtn != btn) changeColorOfBtn(selectedFilterBtn, false)
-
-        changeColorOfBtn(btn, true)
-
-        val category = btn.text.toString().lowercase(Locale.getDefault())
-
+    private fun buttonHandler(
+        btn: Button,
+        selectedFilterBtn: Button,
+        queue: RequestQueue,
+        category: String
+    ) {
+        if (selectedFilterBtn != btn) changeColorOfBtn(selectedFilterBtn, true)
+        changeColorOfBtn(btn, false)
         addToQueue(category, queue)
     }
 
@@ -267,13 +267,13 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun changeColorOfBtn(btn: Button, mode: Boolean) {
-        if (mode) {
-            btn.setBackgroundColor(resources.getColor(R.color.gradient_red, null))
-            btn.setTextColor(resources.getColor(R.color.white, null))
-        } else {
+    private fun changeColorOfBtn(btn: Button, isSelectedBtn: Boolean) {
+        if (!isSelectedBtn) {
             btn.setBackgroundColor(resources.getColor(R.color.white, null))
             btn.setTextColor(resources.getColor(R.color.black, null))
+        } else {
+            btn.setBackgroundColor(resources.getColor(R.color.gradient_red, null))
+            btn.setTextColor(resources.getColor(R.color.white, null))
         }
     }
 
@@ -294,7 +294,7 @@ class DashboardFragment : Fragment() {
     ): Button {
         val category = btn.text.toString().lowercase(Locale.getDefault())
         if (timeCheck) {
-            buttonHandler(btn, selectedFilterBtn, queue)
+            buttonHandler(btn, selectedFilterBtn, queue, category)
             backgroundDBOperations(category, dao)
         } else {
             runBlocking {
@@ -305,7 +305,7 @@ class DashboardFragment : Fragment() {
                         DashboardRecyclerAdapter(activity as Context, newsItems)
                     rvDashboard.adapter = dashboardRecyclerAdapter
                 } else {
-                    buttonHandler(btn, selectedFilterBtn, queue)
+                    buttonHandler(btn, selectedFilterBtn, queue, category)
                 }
             }
         }
