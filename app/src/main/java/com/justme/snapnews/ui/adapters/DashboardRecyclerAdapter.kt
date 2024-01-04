@@ -66,10 +66,11 @@ class DashboardRecyclerAdapter(
                 val bookmark = converterToBookmarkEntity(data)
                 if (data.isBookmarked){
                     data.isBookmarked = false
-                    holder.imgBookmark.setImageResource(R.drawable.ic_bookmark_filled)
+                    holder.imgBookmark.setImageResource(R.drawable.ic_bookmark_outline)
                     dao.deleteFromBookmarks(bookmark)
                 } else {
                     data.isBookmarked = true
+                    holder.imgBookmark.setImageResource(R.drawable.ic_bookmark_filled)
                     dao.insertInBookmarks(bookmark)
                 }
             }
