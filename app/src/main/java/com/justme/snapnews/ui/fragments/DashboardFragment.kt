@@ -10,36 +10,40 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.FrameLayout
 import android.widget.HorizontalScrollView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
+import android.widget.ScrollView
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.room.Room
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import com.justme.snapnews.R
+import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDB
+import com.justme.snapnews.data.db.cachedarticlesdb.TechnologyCategory
 import com.justme.snapnews.data.models.NewsItem
 import com.justme.snapnews.ui.adapters.DashboardRecyclerAdapter
 import com.justme.snapnews.util.isConnectedToInternet
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import java.util.Locale
-import java.util.Queue
+
+//create all functions for all category daos
 
 class DashboardFragment : Fragment() {
-    private lateinit var flDashboard: FrameLayout
+    private lateinit var svDashboard: ScrollView
     private lateinit var rlDashboard: RelativeLayout
     private lateinit var rvDashboard: RecyclerView
     private lateinit var pbDashboard: ProgressBar
     private lateinit var hsvFilterButtons: HorizontalScrollView
-    private lateinit var btnFilterTop: Button
     private lateinit var btnFilterTechnology: Button
     private lateinit var btnFilterBusiness: Button
     private lateinit var btnFilterScience: Button
@@ -70,12 +74,11 @@ class DashboardFragment : Fragment() {
         val sharedPreferences =
             requireContext().getSharedPreferences("snapnewsCache", Context.MODE_PRIVATE)
 
-        flDashboard = view.findViewById(R.id.flDashboard)
+        svDashboard = view.findViewById(R.id.svDashboard)
         rlDashboard = view.findViewById(R.id.rlDashboard)
         rvDashboard = view.findViewById(R.id.rvDashboard)
         pbDashboard = view.findViewById(R.id.pbDashboard)
         hsvFilterButtons = view.findViewById(R.id.hsvFilterButtons)
-        btnFilterTop = view.findViewById(R.id.btnFilterTop)
         btnFilterTechnology = view.findViewById(R.id.btnFilterTechnology)
         btnFilterBusiness = view.findViewById(R.id.btnFilterBusiness)
         btnFilterScience = view.findViewById(R.id.btnFilterScience)
@@ -105,14 +108,41 @@ class DashboardFragment : Fragment() {
 
         val queue = Volley.newRequestQueue(activity as Context)
 
-        val selectedBtn = btnFilterTop
-
-        btnFilterBusiness.setOnClickListener {
-            buttonHandler(btnFilterBusiness, selectedBtn, queue)
-        }
+        var selectedBtn = btnFilterTechnology
+        val db = Room.databaseBuilder(
+            activity as Context,
+            CachedArticlesDB::class.java,
+            "cached-article"
+        ).build()
 
         //check which button has been clicked
+        btnFilterTechnology.setOnClickListener {
+            if (timeCheck) {
+                buttonHandler(btnFilterTechnology, selectedBtn, queue)
+            } else {
+                CoroutineScope(Dispatchers.Main).launch {
+                    val topItems = db.TechnologyCategoryDao().getAllCachedArticles()
 
+                    db.TechnologyCategoryDao().deleteAll()
+
+                    for (item in topItems) {
+                        val techNewsItem = TechnologyCategory(
+                            item.article_id ?: "000",
+                            item.content ?: "",
+                            item.link ?: "",
+                            item.title ?: "",
+                            item.country ?: "",
+                            item.description ?: "",
+                            item.image_url ?: "",
+                            item.source_id ?: "",
+                            item.isBookmarked ?: false
+                        )
+                        db.TechnologyCategoryDao().insertArticle(techNewsItem)
+                    }
+                }
+            }
+            selectedBtn = btnFilterTechnology
+        }
         //check if article list already exists; if one hour has passed fetch new and delete from db
         //if exists pass that list onto adapter
         //subsequently request article
@@ -132,11 +162,9 @@ class DashboardFragment : Fragment() {
     }
 
     private fun buttonHandler(btn: Button, selectedFilterBtn: Button, queue: RequestQueue) {
-        if (selectedFilterBtn != btn) {
-            TODO("Change color (background and text)")
-        }
+        if (selectedFilterBtn != btn) colorChangeOfBtn(selectedFilterBtn, false)
 
-        TODO("Change color (background and text) selected")
+        colorChangeOfBtn(btn, true)
 
         val category = btn.text.toString().lowercase(Locale.getDefault())
 
@@ -172,6 +200,18 @@ class DashboardFragment : Fragment() {
                                     isBookmarked = false
                                 )
                                 newsArticles.add(newsItem)
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    val db = Room.databaseBuilder(
+                                        activity as Context,
+                                        CachedArticlesDB::class.java,
+                                        "cached-articles"
+                                    ).build()
+                                    val dao = when (category) {
+                                        "top" -> db.TechnologyCategoryDao()
+                                        "business" -> db.cachedArticlesDao()
+
+                                    }
+                                }
                             }
                         } else {
                             TODO("make a toast for try again")
@@ -191,7 +231,7 @@ class DashboardFragment : Fragment() {
             dialog.setPositiveButton("Open Settings") { _, _ ->
                 val settingsIntent = Intent(Settings.ACTION_WIRELESS_SETTINGS)
                 startActivity(settingsIntent)
-                if (isAdded){
+                if (isAdded) {
                     requireActivity().finish()
                 }
             }
@@ -200,6 +240,16 @@ class DashboardFragment : Fragment() {
             }
             dialog.create()
             dialog.show()
+        }
+    }
+
+    private fun colorChangeOfBtn(btn: Button, mode: Boolean) {
+        if (mode) {
+            btn.setBackgroundColor(resources.getColor(R.color.gradient_red, null))
+            btn.setTextColor(resources.getColor(R.color.white, null))
+        } else {
+            btn.setBackgroundColor(resources.getColor(R.color.white, null))
+            btn.setTextColor(resources.getColor(R.color.black, null))
         }
     }
 }
