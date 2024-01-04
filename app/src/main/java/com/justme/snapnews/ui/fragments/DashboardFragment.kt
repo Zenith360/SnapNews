@@ -26,7 +26,6 @@ import com.justme.snapnews.R
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDB
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDao
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesEntity
-import com.justme.snapnews.data.db.cachedarticlesdb.TechnologyCategory
 import com.justme.snapnews.data.models.NewsItem
 import com.justme.snapnews.ui.adapters.DashboardRecyclerAdapter
 import com.justme.snapnews.util.converterToCachedArticlesEntity
@@ -67,7 +66,7 @@ class DashboardFragment : Fragment() {
 
     private lateinit var layoutManagerDashboard: LinearLayoutManager
     private lateinit var dashboardRecyclerAdapter: DashboardRecyclerAdapter
-    private lateinit var futureArticles : MutableList<NewsItem>
+    private lateinit var futureArticles: MutableList<NewsItem>
 
     private var url = "https://newsdata.io/api/1/news?apikey="
 
@@ -120,35 +119,67 @@ class DashboardFragment : Fragment() {
             CachedArticlesDB::class.java,
             "cached-article"
         ).build()
+        val dao = db.cachedArticlesDao()
 
-        //check which button has been clicked
         btnFilterTechnology.setOnClickListener {
-            val dao = db.cachedArticlesDao()
-            var articles: MutableList<CachedArticlesEntity>
-            val category = btnFilterTechnology.text.toString().lowercase(Locale.getDefault())
-            if (timeCheck) {
-                buttonHandler(btnFilterTechnology, selectedBtn, queue)
-            } else {
-                runBlocking {
-                    articles = dao.getAllCachedArticles(category) ?: mutableListOf()
-                    val newsItems: MutableList<NewsItem>
-                    if (articles.isNotEmpty()){
-                        newsItems = converterToNewsItem(articles)
-                        dashboardRecyclerAdapter = DashboardRecyclerAdapter(activity as Context, newsItems)
-                        rvDashboard.adapter = dashboardRecyclerAdapter
-                    } else {
-                        buttonHandler(btnFilterTechnology, selectedBtn, queue)
-                    }
-                }
-            }
-            backgroundDBOperations(category, dao)
-            selectedBtn = btnFilterTechnology
+            selectedBtn = btnClick(btnFilterTechnology, selectedBtn, dao, queue, timeCheck)
         }
-        //check if article list already exists; if one hour has passed fetch new and delete from db
-        //if exists pass that list onto adapter
-        //subsequently request article
-        //pass to adapter
 
+        btnFilterBusiness.setOnClickListener {
+            selectedBtn = btnClick(btnFilterBusiness, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterCrime.setOnClickListener {
+            selectedBtn = btnClick(btnFilterCrime, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterDomestic.setOnClickListener {
+            selectedBtn = btnClick(btnFilterDomestic, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterEntertainment.setOnClickListener {
+            selectedBtn = btnClick(btnFilterEntertainment, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterEducation.setOnClickListener {
+            selectedBtn = btnClick(btnFilterEducation, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterEnvironment.setOnClickListener {
+            selectedBtn = btnClick(btnFilterEnvironment, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterFood.setOnClickListener {
+            selectedBtn = btnClick(btnFilterFood, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterHealth.setOnClickListener {
+            selectedBtn = btnClick(btnFilterHealth, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterOther.setOnClickListener {
+            selectedBtn = btnClick(btnFilterOther, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterPolitics.setOnClickListener {
+            selectedBtn = btnClick(btnFilterPolitics, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterSports.setOnClickListener {
+            selectedBtn = btnClick(btnFilterSports, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterTourism.setOnClickListener {
+            selectedBtn = btnClick(btnFilterTourism, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterWorld.setOnClickListener {
+            selectedBtn = btnClick(btnFilterWorld, selectedBtn, dao, queue, timeCheck)
+        }
+
+        btnFilterScience.setOnClickListener {
+            selectedBtn = btnClick(btnFilterScience, selectedBtn, dao, queue, timeCheck)
+        }
         return view
     }
 
@@ -163,17 +194,20 @@ class DashboardFragment : Fragment() {
     }
 
     private fun buttonHandler(btn: Button, selectedFilterBtn: Button, queue: RequestQueue) {
-        if (selectedFilterBtn != btn) colorChangeOfBtn(selectedFilterBtn, false)
+        if (selectedFilterBtn != btn) changeColorOfBtn(selectedFilterBtn, false)
 
-        colorChangeOfBtn(btn, true)
+        changeColorOfBtn(btn, true)
 
         val category = btn.text.toString().lowercase(Locale.getDefault())
 
         addToQueue(category, queue)
     }
 
-    private fun addToQueue(category: String, queue: RequestQueue) { // TODO : rewrite this function so that the adapter initialization can happen in the
-                                                                    // click listener
+    private fun addToQueue(
+        category: String,
+        queue: RequestQueue
+    ) { // TODO : rewrite this function so that the adapter initialization can happen in the
+        // click listener
         url += "&category=$category"
         val newsArticles: MutableList<NewsItem> = mutableListOf()
 
@@ -233,7 +267,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun colorChangeOfBtn(btn: Button, mode: Boolean) {
+    private fun changeColorOfBtn(btn: Button, mode: Boolean) {
         if (mode) {
             btn.setBackgroundColor(resources.getColor(R.color.gradient_red, null))
             btn.setTextColor(resources.getColor(R.color.white, null))
@@ -243,13 +277,38 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun backgroundDBOperations(category: String, dao : CachedArticlesDao){
+    private fun backgroundDBOperations(category: String, dao: CachedArticlesDao) {
         CoroutineScope(Dispatchers.IO).launch {
             dao.deleteAll(category)
             val cachedArticles = converterToCachedArticlesEntity(futureArticles)
-            for (article in cachedArticles){
-                dao.insertArticle(article)
+            for (article in cachedArticles) dao.insertArticle(article)
+        }
+    }
+
+    private fun btnClick(
+        btn: Button,
+        selectedFilterBtn: Button,
+        dao: CachedArticlesDao,
+        queue: RequestQueue,
+        timeCheck: Boolean
+    ): Button {
+        val category = btn.text.toString().lowercase(Locale.getDefault())
+        if (timeCheck) {
+            buttonHandler(btn, selectedFilterBtn, queue)
+            backgroundDBOperations(category, dao)
+        } else {
+            runBlocking {
+                val articles = dao.getAllCachedArticles(category) ?: mutableListOf()
+                if (articles.isNotEmpty()) {
+                    val newsItems = converterToNewsItem(articles)
+                    dashboardRecyclerAdapter =
+                        DashboardRecyclerAdapter(activity as Context, newsItems)
+                    rvDashboard.adapter = dashboardRecyclerAdapter
+                } else {
+                    buttonHandler(btn, selectedFilterBtn, queue)
+                }
             }
         }
+        return btn
     }
 }
