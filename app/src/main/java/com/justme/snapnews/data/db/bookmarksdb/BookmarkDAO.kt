@@ -17,6 +17,6 @@ interface BookmarkDAO {
     @Delete
     fun deleteFromBookmarks(bookmarkEntity: BookmarkEntity)
 
-    @Query("SELECT * FROM bookmarks WHERE article_id = :artId")
-    fun getBookmarkById(artId : String) : BookmarkEntity
+    @Query("UPDATE bookmarks SET isBookmarked = :isBookmarked WHERE article_id = :artId")
+    fun getBookmarkById(isBookmarked : Boolean, artId : String) : BookmarkEntity
 }

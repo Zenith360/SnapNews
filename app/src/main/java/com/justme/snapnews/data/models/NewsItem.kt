@@ -10,5 +10,5 @@ data class NewsItem(
     val description: String?,
     val image_url: String,
     val source_id: String,
-    val isBookmarked: Boolean
+    var isBookmarked: Boolean
 )

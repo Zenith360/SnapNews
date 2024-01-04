@@ -39,8 +39,6 @@ import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import java.util.Locale
 
-//create all functions for all category daos
-
 class DashboardFragment : Fragment() {
     private lateinit var svDashboard: ScrollView
     private lateinit var rlDashboard: RelativeLayout

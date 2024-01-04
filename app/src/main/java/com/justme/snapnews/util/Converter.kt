@@ -1,5 +1,6 @@
 package com.justme.snapnews.util
 
+import com.justme.snapnews.data.db.bookmarksdb.BookmarkEntity
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesEntity
 import com.justme.snapnews.data.models.NewsItem
 
@@ -45,4 +46,19 @@ fun converterToCachedArticlesEntity(articles : MutableList<NewsItem>) : MutableL
     }
 
     return cachedArticles
+}
+
+fun converterToBookmarkEntity(newsItem: NewsItem) : BookmarkEntity{
+    return BookmarkEntity(
+        newsItem.article_id,
+        newsItem.content,
+        newsItem.link,
+        newsItem.title,
+        newsItem.category,
+        listOf(newsItem.country),
+        newsItem.description,
+        newsItem.image_url,
+        newsItem.source_id,
+        newsItem.isBookmarked
+    )
 }
