@@ -24,13 +24,18 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.justme.snapnews.R
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDB
+import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDao
+import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesEntity
 import com.justme.snapnews.data.db.cachedarticlesdb.TechnologyCategory
 import com.justme.snapnews.data.models.NewsItem
 import com.justme.snapnews.ui.adapters.DashboardRecyclerAdapter
+import com.justme.snapnews.util.converterToCachedArticlesEntity
+import com.justme.snapnews.util.converterToNewsItem
 import com.justme.snapnews.util.isConnectedToInternet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.json.JSONObject
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
@@ -62,6 +67,7 @@ class DashboardFragment : Fragment() {
 
     private lateinit var layoutManagerDashboard: LinearLayoutManager
     private lateinit var dashboardRecyclerAdapter: DashboardRecyclerAdapter
+    private lateinit var futureArticles : MutableList<NewsItem>
 
     private var url = "https://newsdata.io/api/1/news?apikey="
 
@@ -117,25 +123,25 @@ class DashboardFragment : Fragment() {
 
         //check which button has been clicked
         btnFilterTechnology.setOnClickListener {
+            val dao = db.cachedArticlesDao()
+            var articles: MutableList<CachedArticlesEntity>
+            val category = btnFilterTechnology.text.toString().lowercase(Locale.getDefault())
             if (timeCheck) {
                 buttonHandler(btnFilterTechnology, selectedBtn, queue)
             } else {
-                CoroutineScope(Dispatchers.Main).launch {
-                    val dao = Room.databaseBuilder(
-                        activity as Context,
-                        CachedArticlesDB::class.java,
-                        "cached-articles"
-                    ).build().cachedArticlesDao()
-
-                    val allArticles = dao.getAllCachedArticles("technology") ?: mutableListOf()
-
-                    if (allArticles.isNotEmpty()){
-                        // create util function as is same for all
+                runBlocking {
+                    articles = dao.getAllCachedArticles(category) ?: mutableListOf()
+                    val newsItems: MutableList<NewsItem>
+                    if (articles.isNotEmpty()){
+                        newsItems = converterToNewsItem(articles)
+                        dashboardRecyclerAdapter = DashboardRecyclerAdapter(activity as Context, newsItems)
+                        rvDashboard.adapter = dashboardRecyclerAdapter
+                    } else {
+                        buttonHandler(btnFilterTechnology, selectedBtn, queue)
                     }
-
-                    dao.deleteAll("technology")
                 }
             }
+            backgroundDBOperations(category, dao)
             selectedBtn = btnFilterTechnology
         }
         //check if article list already exists; if one hour has passed fetch new and delete from db
@@ -166,8 +172,8 @@ class DashboardFragment : Fragment() {
         addToQueue(category, queue)
     }
 
-    private fun addToQueue(category: String, queue: RequestQueue) {
-
+    private fun addToQueue(category: String, queue: RequestQueue) { // TODO : rewrite this function so that the adapter initialization can happen in the
+                                                                    // click listener
         url += "&category=$category"
         val newsArticles: MutableList<NewsItem> = mutableListOf()
 
@@ -195,19 +201,8 @@ class DashboardFragment : Fragment() {
                                     isBookmarked = false
                                 )
                                 newsArticles.add(newsItem)
-                                CoroutineScope(Dispatchers.IO).launch {
-                                    val db = Room.databaseBuilder(
-                                        activity as Context,
-                                        CachedArticlesDB::class.java,
-                                        "cached-articles"
-                                    ).build()
-                                    val dao = when (category) {
-                                        "top" -> db.TechnologyCategoryDao()
-                                        "business" -> db.cachedArticlesDao()
-
-                                    }
-                                }
                             }
+                            futureArticles = newsArticles
                         } else {
                             TODO("make a toast for try again")
                         }
@@ -245,6 +240,16 @@ class DashboardFragment : Fragment() {
         } else {
             btn.setBackgroundColor(resources.getColor(R.color.white, null))
             btn.setTextColor(resources.getColor(R.color.black, null))
+        }
+    }
+
+    private fun backgroundDBOperations(category: String, dao : CachedArticlesDao){
+        CoroutineScope(Dispatchers.IO).launch {
+            dao.deleteAll(category)
+            val cachedArticles = converterToCachedArticlesEntity(futureArticles)
+            for (article in cachedArticles){
+                dao.insertArticle(article)
+            }
         }
     }
 }
