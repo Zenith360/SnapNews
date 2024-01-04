@@ -121,24 +121,19 @@ class DashboardFragment : Fragment() {
                 buttonHandler(btnFilterTechnology, selectedBtn, queue)
             } else {
                 CoroutineScope(Dispatchers.Main).launch {
-                    val topItems = db.TechnologyCategoryDao().getAllCachedArticles()
+                    val dao = Room.databaseBuilder(
+                        activity as Context,
+                        CachedArticlesDB::class.java,
+                        "cached-articles"
+                    ).build().cachedArticlesDao()
 
-                    db.TechnologyCategoryDao().deleteAll()
+                    val allArticles = dao.getAllCachedArticles("technology") ?: mutableListOf()
 
-                    for (item in topItems) {
-                        val techNewsItem = TechnologyCategory(
-                            item.article_id ?: "000",
-                            item.content ?: "",
-                            item.link ?: "",
-                            item.title ?: "",
-                            item.country ?: "",
-                            item.description ?: "",
-                            item.image_url ?: "",
-                            item.source_id ?: "",
-                            item.isBookmarked ?: false
-                        )
-                        db.TechnologyCategoryDao().insertArticle(techNewsItem)
+                    if (allArticles.isNotEmpty()){
+                        // create util function as is same for all
                     }
+
+                    dao.deleteAll("technology")
                 }
             }
             selectedBtn = btnFilterTechnology
