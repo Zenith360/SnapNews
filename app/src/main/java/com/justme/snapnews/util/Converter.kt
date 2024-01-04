@@ -24,3 +24,25 @@ fun converterToNewsItem(articles : MutableList<CachedArticlesEntity>) : MutableL
 
     return newsItems
 }
+
+fun converterToCachedArticlesEntity(articles : MutableList<NewsItem>) : MutableList<CachedArticlesEntity>{
+    val cachedArticles = mutableListOf<CachedArticlesEntity>()
+
+    for (article in articles){
+        val cachedArticle = CachedArticlesEntity(
+            article.article_id,
+            article.content,
+            article.link,
+            article.title,
+            article.country,
+            article.description ?: "",
+            article.image_url,
+            article.source_id,
+            article.isBookmarked,
+            article.category
+        )
+        cachedArticles.add(cachedArticle)
+    }
+
+    return cachedArticles
+}
