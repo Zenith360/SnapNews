@@ -63,9 +63,9 @@ class DashboardFragment : Fragment() {
     private lateinit var btnFilterSports: Button
     private lateinit var btnFilterTourism: Button
     private lateinit var btnFilterWorld: Button
-    private lateinit var rvTopNews : RecyclerView
+    private lateinit var rvTopNews: RecyclerView
 
-    private lateinit var layoutManagerDashboard: LinearLayoutManager
+    private lateinit var layoutManager: LinearLayoutManager
     private lateinit var dashboardRecyclerAdapter: DashboardRecyclerAdapter
     private lateinit var futureArticles: MutableList<NewsItem>
 
@@ -103,9 +103,10 @@ class DashboardFragment : Fragment() {
         btnFilterWorld = view.findViewById(R.id.btnFilterWorld)
         rvTopNews = view.findViewById(R.id.rvTopNews)
 
-        layoutManagerDashboard = LinearLayoutManager(activity as Context)
+        layoutManager = LinearLayoutManager(activity as Context)
 
-        rvDashboard.layoutManager = layoutManagerDashboard
+        rvDashboard.layoutManager = layoutManager
+        rvTopNews.layoutManager = layoutManager
 
         hsvFilterButtons.isHorizontalScrollBarEnabled = false
 
@@ -123,6 +124,8 @@ class DashboardFragment : Fragment() {
             "cached-article"
         ).build()
         val dao = db.cachedArticlesDao()
+
+        addToQueue("top", queue, rvTopNews)
 
         btnFilterTechnology.setOnClickListener {
             selectedBtn = btnClick(btnFilterTechnology, selectedBtn, dao, queue, timeCheck)
@@ -210,7 +213,7 @@ class DashboardFragment : Fragment() {
     private fun addToQueue(
         category: String,
         queue: RequestQueue,
-        recycler : RecyclerView
+        recycler: RecyclerView
     ) { // TODO : rewrite this function so that the adapter initialization can happen in the
         // click listener
         url += "&category=$category"
@@ -222,7 +225,7 @@ class DashboardFragment : Fragment() {
                 jsonObj.put("category", category)
 
                 val jsonObjectRequest = object :
-                    JsonObjectRequest(Method.GET, url, jsonObj, Response.Listener { jsonObj ->
+                    JsonObjectRequest(Method.POST, url, jsonObj, Response.Listener { jsonObj ->
                         if (jsonObj.getString("status") == "success") {
                             val articles = jsonObj.getJSONArray("results")
                             for (i in 0 until articles.length()) {
