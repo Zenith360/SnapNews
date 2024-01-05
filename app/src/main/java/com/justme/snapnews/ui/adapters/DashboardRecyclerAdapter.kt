@@ -21,16 +21,14 @@ import kotlinx.coroutines.launch
 
 class DashboardRecyclerAdapter(
     private val context: Context,
-    private val newsItems : MutableList<NewsItem>
+    private val newsItems: MutableList<NewsItem>
 ) :
     RecyclerView.Adapter<DashboardRecyclerAdapter.DashboardViewHolder>() {
     class DashboardViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val llCardLayout: LinearLayout = view.findViewById(R.id.llCardLayout)
-        val cvImage: CardView = view.findViewById(R.id.cvImage)
-        var imgNewsImage: ImageView = view.findViewById(R.id.imgNewsImage)
-        var txtHeadline: TextView = view.findViewById(R.id.txtHeadline)
-        var imgBookmark: ImageView = view.findViewById(R.id.imgBookmark)
-        var txtDescription: TextView = view.findViewById(R.id.txtDescription)
+        val imgNewsImage: ImageView = view.findViewById(R.id.imgNewsImage)
+        val txtHeadline: TextView = view.findViewById(R.id.txtHeadline)
+        val imgBookmark: ImageView = view.findViewById(R.id.imgBookmark)
+        val txtDescription: TextView = view.findViewById(R.id.txtDescription)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardViewHolder {
@@ -62,9 +60,9 @@ class DashboardRecyclerAdapter(
         val dao = db.bookmarkDAO()
 
         holder.imgBookmark.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch{
+            CoroutineScope(Dispatchers.Main).launch {
                 val bookmark = converterToBookmarkEntity(data)
-                if (data.isBookmarked){
+                if (data.isBookmarked) {
                     data.isBookmarked = false
                     holder.imgBookmark.setImageResource(R.drawable.ic_bookmark_outline)
                     dao.deleteFromBookmarks(bookmark)

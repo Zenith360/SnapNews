@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,7 @@ import android.widget.HorizontalScrollView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.ScrollView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +27,7 @@ import com.android.volley.toolbox.Volley
 import com.justme.snapnews.R
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDB
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDao
+import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesEntity
 import com.justme.snapnews.data.models.NewsItem
 import com.justme.snapnews.ui.adapters.DashboardRecyclerAdapter
 import com.justme.snapnews.util.converterToCachedArticlesEntity
@@ -60,12 +63,14 @@ class DashboardFragment : Fragment() {
     private lateinit var btnFilterSports: Button
     private lateinit var btnFilterTourism: Button
     private lateinit var btnFilterWorld: Button
+    private lateinit var rvTopNews : RecyclerView
 
     private lateinit var layoutManagerDashboard: LinearLayoutManager
     private lateinit var dashboardRecyclerAdapter: DashboardRecyclerAdapter
     private lateinit var futureArticles: MutableList<NewsItem>
 
     private var url = "https://newsdata.io/api/1/news?apikey="
+    private val tag = "DashboardFragment"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,6 +101,7 @@ class DashboardFragment : Fragment() {
         btnFilterSports = view.findViewById(R.id.btnFilterSports)
         btnFilterTourism = view.findViewById(R.id.btnFilterTourism)
         btnFilterWorld = view.findViewById(R.id.btnFilterWorld)
+        rvTopNews = view.findViewById(R.id.rvTopNews)
 
         layoutManagerDashboard = LinearLayoutManager(activity as Context)
 
@@ -198,12 +204,13 @@ class DashboardFragment : Fragment() {
     ) {
         if (selectedFilterBtn != btn) changeColorOfBtn(selectedFilterBtn, true)
         changeColorOfBtn(btn, false)
-        addToQueue(category, queue)
+        addToQueue(category, queue, rvDashboard)
     }
 
     private fun addToQueue(
         category: String,
-        queue: RequestQueue
+        queue: RequestQueue,
+        recycler : RecyclerView
     ) { // TODO : rewrite this function so that the adapter initialization can happen in the
         // click listener
         url += "&category=$category"
@@ -236,15 +243,30 @@ class DashboardFragment : Fragment() {
                             }
                             futureArticles = newsArticles
                         } else {
-                            TODO("make a toast for try again")
+                            Toast.makeText(
+                                activity as Context,
+                                "News can't be fetched. Try again later",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            Log.e(tag, "success status code not received.")
                         }
                     }, Response.ErrorListener {
-                        TODO("make a toast also log")
+                        Toast.makeText(
+                            activity as Context,
+                            "News can't be fetched. Try again later",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        Log.e(tag, "response error listener", it.cause)
                     }) {}
-                rvDashboard.adapter = DashboardRecyclerAdapter(activity as Context, newsArticles)
+                recycler.adapter = DashboardRecyclerAdapter(activity as Context, newsArticles)
                 queue.add(jsonObjectRequest)
             } catch (e: Exception) {
-                TODO("Make a toast also log")
+                Toast.makeText(
+                    activity as Context,
+                    "Parse Error",
+                    Toast.LENGTH_SHORT
+                ).show()
+                Log.e(tag, "Json parse error probs", e.cause)
             }
         } else {
             val dialog = AlertDialog.Builder(activity as Context)
@@ -295,16 +317,17 @@ class DashboardFragment : Fragment() {
             buttonHandler(btn, selectedFilterBtn, queue, category)
             backgroundDBOperations(category, dao)
         } else {
+            val articles: MutableList<CachedArticlesEntity>
             runBlocking {
-                val articles = dao.getAllCachedArticles(category) ?: mutableListOf()
-                if (articles.isNotEmpty()) {
-                    val newsItems = converterToNewsItem(articles)
-                    dashboardRecyclerAdapter =
-                        DashboardRecyclerAdapter(activity as Context, newsItems)
-                    rvDashboard.adapter = dashboardRecyclerAdapter
-                } else {
-                    buttonHandler(btn, selectedFilterBtn, queue, category)
-                }
+                articles = dao.getAllCachedArticles(category) ?: mutableListOf()
+            }
+            if (articles.isNotEmpty()) {
+                val newsItems = converterToNewsItem(articles)
+                dashboardRecyclerAdapter =
+                    DashboardRecyclerAdapter(activity as Context, newsItems)
+                rvDashboard.adapter = dashboardRecyclerAdapter
+            } else {
+                buttonHandler(btn, selectedFilterBtn, queue, category)
             }
         }
         return btn
