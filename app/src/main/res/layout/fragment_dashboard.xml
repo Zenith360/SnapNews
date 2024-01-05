@@ -1,204 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/svDashboard"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragments.DashboardFragment">
 
-    <RelativeLayout
-        android:id="@+id/rlDashboard"
+    <ProgressBar
+        android:id="@+id/pbEntireDashboard"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:scaleX="0.5"
+        android:scaleY="0.5"
+        android:visibility="visible" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvTopNews"
+    <ScrollView
+        android:id="@+id/svDashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible">
+
+        <RelativeLayout
+            android:id="@+id/rlDashboard"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp" />
+            android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtAboveFilterBtns"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rvTopNews"
-            android:layout_marginTop="15dp"
-            android:text="@string/news_for_the_day"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTopNews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp" />
 
-        <HorizontalScrollView
-            android:id="@+id/hsvFilterButtons"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/txtAboveFilterBtns"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="5dp">
-
-            <LinearLayout
-                android:id="@+id/llFilterButtons"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txtAboveFilterBtns"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_below="@id/rvTopNews"
+                android:layout_marginTop="15dp"
+                android:text="@string/news_for_the_day"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
+            <ProgressBar
+                android:id="@+id/pbDashboard"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/txtAboveFilterBtns"
+                android:layout_marginTop="50dp"
+                android:visibility="visible" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterTechnology"
-                    android:layout_width="wrap_content"
+            <RelativeLayout
+                android:id="@+id/rlBottomNews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pbDashboard"
+                android:visibility="gone">
+
+                <HorizontalScrollView
+                    android:id="@+id/hsvFilterButtons"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_technology"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="15dp">
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterBusiness"
-                    android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/llFilterButtons"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterTechnology"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_technology"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterBusiness"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_business"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterScience"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_science"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterCrime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_crime"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterDomestic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_domestic"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterEducation"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_education"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterEntertainment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_entertainment"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterEnvironment"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_environment"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterFood"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_food"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterHealth"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_health"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterOther"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_other"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterPolitics"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_politics"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterSports"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_sports"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterTourism"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_tourism"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btnFilterWorld"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/filter_btn_world"
+                            android:textAllCaps="false"
+                            android:textSize="15sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                </HorizontalScrollView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvDashboard"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_business"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:layout_below="@id/hsvFilterButtons"
+                    android:layout_marginHorizontal="5dp"
+                    android:layout_marginTop="10dp" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterScience"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_science"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+            </RelativeLayout>
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterCrime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_crime"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterDomestic"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_domestic"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterEducation"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_education"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterEntertainment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_entertainment"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterEnvironment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_environment"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterFood"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_food"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterHealth"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_health"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterOther"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_other"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterPolitics"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_politics"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterSports"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_sports"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterTourism"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_tourism"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <androidx.appcompat.widget.AppCompatButton
-                    android:id="@+id/btnFilterWorld"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/filter_btn_world"
-                    android:textAllCaps="false"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-        </HorizontalScrollView>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvDashboard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/hsvFilterButtons"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginTop="10dp" />
-
-        <ProgressBar
-            android:id="@+id/pbDashboard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rvDashboard"
-            android:layout_marginTop="3dp"
-            android:visibility="visible" />
-
-    </RelativeLayout>
-
-</ScrollView>
+        </RelativeLayout>
+    </ScrollView>
+</FrameLayout>

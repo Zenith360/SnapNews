@@ -30,6 +30,7 @@ import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDao
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesEntity
 import com.justme.snapnews.data.models.NewsItem
 import com.justme.snapnews.ui.adapters.DashboardRecyclerAdapter
+import com.justme.snapnews.util.URL
 import com.justme.snapnews.util.converterToCachedArticlesEntity
 import com.justme.snapnews.util.converterToNewsItem
 import com.justme.snapnews.util.isConnectedToInternet
@@ -69,7 +70,7 @@ class DashboardFragment : Fragment() {
     private lateinit var dashboardRecyclerAdapter: DashboardRecyclerAdapter
     private lateinit var futureArticles: MutableList<NewsItem>
 
-    private var url = "https://newsdata.io/api/1/news?apikey="
+    //    private var url = "https://newsdata.io/api/1/news?apikey="
     private val tag = "DashboardFragment"
 
     override fun onCreateView(
@@ -125,7 +126,22 @@ class DashboardFragment : Fragment() {
         ).build()
         val dao = db.cachedArticlesDao()
 
-        addToQueue("top", queue, rvTopNews)
+        if (timeCheck) {
+            addToQueue("top", queue, rvTopNews)
+            backgroundDBOperations("top", dao)
+        } else {
+            val articles: MutableList<CachedArticlesEntity>
+            runBlocking {
+                articles = dao.getAllCachedArticles("top") ?: mutableListOf()
+            }
+            if (articles.isNotEmpty()) {
+                rvTopNews.adapter =
+                    DashboardRecyclerAdapter(activity as Context, converterToNewsItem(articles))
+            } else {
+                addToQueue("top", queue, rvTopNews)
+                backgroundDBOperations("top", dao)
+            }
+        }
 
         btnFilterTechnology.setOnClickListener {
             selectedBtn = btnClick(btnFilterTechnology, selectedBtn, dao, queue, timeCheck)
@@ -214,18 +230,16 @@ class DashboardFragment : Fragment() {
         category: String,
         queue: RequestQueue,
         recycler: RecyclerView
-    ) { // TODO : rewrite this function so that the adapter initialization can happen in the
-        // click listener
+    ) { // TODO : rewrite this function so that the adapter initialization can happen in the click listener
+        var url = URL
         url += "&category=$category"
+        if (category == "domestic") url += "&country=in"
         val newsArticles: MutableList<NewsItem> = mutableListOf()
 
         if (isConnectedToInternet(activity as Context)) {
             try {
-                val jsonObj = JSONObject()
-                jsonObj.put("category", category)
-
                 val jsonObjectRequest = object :
-                    JsonObjectRequest(Method.POST, url, jsonObj, Response.Listener { jsonObj ->
+                    JsonObjectRequest(Method.GET, url, null, Response.Listener { jsonObj ->
                         if (jsonObj.getString("status") == "success") {
                             val articles = jsonObj.getJSONArray("results")
                             for (i in 0 until articles.length()) {
@@ -302,6 +316,7 @@ class DashboardFragment : Fragment() {
 
     private fun backgroundDBOperations(category: String, dao: CachedArticlesDao) {
         CoroutineScope(Dispatchers.IO).launch {
+            if (futureArticles.isEmpty()) return@launch
             dao.deleteAll(category)
             val cachedArticles = converterToCachedArticlesEntity(futureArticles)
             for (article in cachedArticles) dao.insertArticle(article)
@@ -326,11 +341,14 @@ class DashboardFragment : Fragment() {
             }
             if (articles.isNotEmpty()) {
                 val newsItems = converterToNewsItem(articles)
+                if (selectedFilterBtn == btn) changeColorOfBtn(selectedFilterBtn, true)
+                changeColorOfBtn(btn, false)
                 dashboardRecyclerAdapter =
                     DashboardRecyclerAdapter(activity as Context, newsItems)
                 rvDashboard.adapter = dashboardRecyclerAdapter
             } else {
                 buttonHandler(btn, selectedFilterBtn, queue, category)
+                backgroundDBOperations(category, dao)
             }
         }
         return btn
