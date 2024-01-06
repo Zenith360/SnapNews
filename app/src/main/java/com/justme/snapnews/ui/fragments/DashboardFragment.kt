@@ -38,7 +38,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import org.json.JSONObject
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import java.util.Locale
@@ -65,12 +64,13 @@ class DashboardFragment : Fragment() {
     private lateinit var btnFilterTourism: Button
     private lateinit var btnFilterWorld: Button
     private lateinit var rvTopNews: RecyclerView
+    private lateinit var pbEntireDashboard : ProgressBar
+    private lateinit var rlBottomNews : RelativeLayout
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var dashboardRecyclerAdapter: DashboardRecyclerAdapter
     private lateinit var futureArticles: MutableList<NewsItem>
 
-    //    private var url = "https://newsdata.io/api/1/news?apikey="
     private val tag = "DashboardFragment"
 
     override fun onCreateView(
@@ -126,6 +126,7 @@ class DashboardFragment : Fragment() {
         ).build()
         val dao = db.cachedArticlesDao()
 
+
         if (timeCheck) {
             addToQueue("top", queue, rvTopNews)
             backgroundDBOperations("top", dao)
@@ -142,6 +143,11 @@ class DashboardFragment : Fragment() {
                 backgroundDBOperations("top", dao)
             }
         }
+
+        pbEntireDashboard.visibility = View.GONE
+        svDashboard.visibility = View.VISIBLE
+
+        selectedBtn = btnClick(btnFilterTechnology, selectedBtn, dao, queue, timeCheck)
 
         btnFilterTechnology.setOnClickListener {
             selectedBtn = btnClick(btnFilterTechnology, selectedBtn, dao, queue, timeCheck)
@@ -304,7 +310,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun changeColorOfBtn(btn: Button, isSelectedBtn: Boolean) {
+    private fun changeColorOfBtn(btn: Button, isSelectedBtn: Boolean) { //TODO: change changeBtnColor so that the selected button check is removed as selected button will always be changed
         if (!isSelectedBtn) {
             btn.setBackgroundColor(resources.getColor(R.color.white, null))
             btn.setTextColor(resources.getColor(R.color.black, null))
@@ -330,6 +336,8 @@ class DashboardFragment : Fragment() {
         queue: RequestQueue,
         timeCheck: Boolean
     ): Button {
+        pbDashboard.visibility = View.GONE
+        rvDashboard.visibility = View.VISIBLE
         val category = btn.text.toString().lowercase(Locale.getDefault())
         if (timeCheck) {
             buttonHandler(btn, selectedFilterBtn, queue, category)

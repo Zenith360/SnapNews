@@ -17,7 +17,7 @@
         android:id="@+id/svDashboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="invisible">
+        android:visibility="gone">
 
         <RelativeLayout
             android:id="@+id/rlDashboard"
@@ -41,20 +41,11 @@
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
-            <ProgressBar
-                android:id="@+id/pbDashboard"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/txtAboveFilterBtns"
-                android:layout_marginTop="50dp"
-                android:visibility="visible" />
-
             <RelativeLayout
                 android:id="@+id/rlBottomNews"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/pbDashboard"
-                android:visibility="gone">
+                android:layout_below="@id/txtAboveFilterBtns">
 
                 <HorizontalScrollView
                     android:id="@+id/hsvFilterButtons"
@@ -68,7 +59,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-
 
                         <androidx.appcompat.widget.AppCompatButton
                             android:id="@+id/btnFilterTechnology"
@@ -209,16 +199,24 @@
 
                 </HorizontalScrollView>
 
+                <ProgressBar
+                    android:id="@+id/pbDashboard"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@id/hsvFilterButtons"
+                    android:layout_marginTop="50dp"
+                    android:visibility="visible" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvDashboard"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/hsvFilterButtons"
                     android:layout_marginHorizontal="5dp"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:visibility="invisible"/>
 
             </RelativeLayout>
-
         </RelativeLayout>
     </ScrollView>
 </FrameLayout>
