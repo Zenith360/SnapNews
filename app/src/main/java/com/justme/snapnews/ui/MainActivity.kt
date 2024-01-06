@@ -41,17 +41,17 @@ class MainActivity : AppCompatActivity() {
 
         fragmentView(sfm, DashboardFragment())
 
-        imgHistoryIcon.setOnClickListener {
-            fragmentView(sfm, HistoryFragment())
-        }
+//        imgHistoryIcon.setOnClickListener {
+//            fragmentView(sfm, HistoryFragment())
+//        }
 
         txtNameOfApp.setOnClickListener {
             fragmentView(sfm, DashboardFragment())
         }
 
-        imgBookmarkMainAc.setOnClickListener {
-            fragmentView(sfm, BookmarkFragment())
-        }
+//        imgBookmarkMainAc.setOnClickListener {
+//            fragmentView(sfm, BookmarkFragment())
+//        }
     }
 
     override fun onDestroy() {

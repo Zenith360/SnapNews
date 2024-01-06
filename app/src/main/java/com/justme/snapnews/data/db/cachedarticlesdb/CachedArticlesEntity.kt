@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "cached-articles")
 data class CachedArticlesEntity(
-    @PrimaryKey val article_id: String? = "000",
+    @PrimaryKey val article_id: String,
     @ColumnInfo(name = "content") val content: String? = "",
     @ColumnInfo(name = "link") val link: String? = "",
     @ColumnInfo(name = "title") val title: String? = "",

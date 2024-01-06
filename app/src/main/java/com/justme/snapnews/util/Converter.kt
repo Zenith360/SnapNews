@@ -55,7 +55,7 @@ fun converterToBookmarkEntity(newsItem: NewsItem) : BookmarkEntity{
         newsItem.link,
         newsItem.title,
         newsItem.category,
-        listOf(newsItem.country),
+        newsItem.country,
         newsItem.description,
         newsItem.image_url,
         newsItem.source_id,

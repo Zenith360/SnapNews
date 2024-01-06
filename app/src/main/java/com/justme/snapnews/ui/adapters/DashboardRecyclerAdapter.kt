@@ -32,6 +32,7 @@ class DashboardRecyclerAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DashboardViewHolder {
+        println("In1")
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.single_item_dashboard, parent, false)
 
@@ -41,13 +42,14 @@ class DashboardRecyclerAdapter(
     override fun getItemCount(): Int = newsItems.size
 
     override fun onBindViewHolder(holder: DashboardViewHolder, position: Int) {
+        println("In")
         val data = newsItems[position]
-        if (data.title.isEmpty())
+        if (data.title.isNotEmpty())
             holder.txtHeadline.text = data.title
         else
             holder.txtHeadline.text = context.getString(R.string.placeholder_headline)
-        if (data.description.isNullOrEmpty())
-            holder.txtDescription.text = data.content.substringBefore(".")
+        if (!data.description.isNullOrEmpty())
+            holder.txtDescription.text = data.content.substringBefore(".") + "."
         else
             holder.txtDescription.text = data.description
         Picasso.get().load(data.image_url).error(R.drawable.garden_test).into(holder.imgNewsImage)

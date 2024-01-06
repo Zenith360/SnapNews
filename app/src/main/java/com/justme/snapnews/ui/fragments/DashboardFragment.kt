@@ -69,9 +69,9 @@ class DashboardFragment : Fragment() {
 
     private lateinit var layoutManager: LinearLayoutManager
     private lateinit var dashboardRecyclerAdapter: DashboardRecyclerAdapter
-    private lateinit var futureArticles: MutableList<NewsItem>
 
     private val tag = "DashboardFragment"
+    private var futureArticles = mutableListOf<NewsItem>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -103,10 +103,12 @@ class DashboardFragment : Fragment() {
         btnFilterTourism = view.findViewById(R.id.btnFilterTourism)
         btnFilterWorld = view.findViewById(R.id.btnFilterWorld)
         rvTopNews = view.findViewById(R.id.rvTopNews)
+        pbEntireDashboard = view.findViewById(R.id.pbEntireDashboard)
 
         layoutManager = LinearLayoutManager(activity as Context)
 
         rvDashboard.layoutManager = layoutManager
+        layoutManager = LinearLayoutManager(activity as Context)
         rvTopNews.layoutManager = layoutManager
 
         hsvFilterButtons.isHorizontalScrollBarEnabled = false
@@ -126,26 +128,10 @@ class DashboardFragment : Fragment() {
         ).build()
         val dao = db.cachedArticlesDao()
 
-
-        if (timeCheck) {
-            addToQueue("top", queue, rvTopNews)
-            backgroundDBOperations("top", dao)
-        } else {
-            val articles: MutableList<CachedArticlesEntity>
-            runBlocking {
-                articles = dao.getAllCachedArticles("top") ?: mutableListOf()
-            }
-            if (articles.isNotEmpty()) {
-                rvTopNews.adapter =
-                    DashboardRecyclerAdapter(activity as Context, converterToNewsItem(articles))
-            } else {
-                addToQueue("top", queue, rvTopNews)
-                backgroundDBOperations("top", dao)
-            }
-        }
-
+        addToQueue("top", queue, rvTopNews)
         pbEntireDashboard.visibility = View.GONE
         svDashboard.visibility = View.VISIBLE
+//        backgroundDBOperations("top", dao)
 
         selectedBtn = btnClick(btnFilterTechnology, selectedBtn, dao, queue, timeCheck)
 
@@ -265,6 +251,7 @@ class DashboardFragment : Fragment() {
                                 newsArticles.add(newsItem)
                             }
                             futureArticles = newsArticles
+                            recycler.adapter = DashboardRecyclerAdapter(activity as Context, newsArticles)
                         } else {
                             Toast.makeText(
                                 activity as Context,
@@ -281,8 +268,9 @@ class DashboardFragment : Fragment() {
                         ).show()
                         Log.e(tag, "response error listener", it.cause)
                     }) {}
-                recycler.adapter = DashboardRecyclerAdapter(activity as Context, newsArticles)
+                println("Here")
                 queue.add(jsonObjectRequest)
+                println("Now")
             } catch (e: Exception) {
                 Toast.makeText(
                     activity as Context,
@@ -320,14 +308,14 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun backgroundDBOperations(category: String, dao: CachedArticlesDao) {
-        CoroutineScope(Dispatchers.IO).launch {
-            if (futureArticles.isEmpty()) return@launch
-            dao.deleteAll(category)
-            val cachedArticles = converterToCachedArticlesEntity(futureArticles)
-            for (article in cachedArticles) dao.insertArticle(article)
-        }
-    }
+//    private fun backgroundDBOperations(category: String, dao: CachedArticlesDao) {
+//        CoroutineScope(Dispatchers.IO).launch {
+//            if (futureArticles.isEmpty()) return@launch
+//            dao.deleteAll(category)
+//            val cachedArticles = converterToCachedArticlesEntity(futureArticles)
+//            for (article in cachedArticles) dao.insertArticle(article)
+//        }
+//    }
 
     private fun btnClick(
         btn: Button,
@@ -336,29 +324,38 @@ class DashboardFragment : Fragment() {
         queue: RequestQueue,
         timeCheck: Boolean
     ): Button {
-        pbDashboard.visibility = View.GONE
-        rvDashboard.visibility = View.VISIBLE
         val category = btn.text.toString().lowercase(Locale.getDefault())
-        if (timeCheck) {
+        if (true) {
             buttonHandler(btn, selectedFilterBtn, queue, category)
-            backgroundDBOperations(category, dao)
-        } else {
-            val articles: MutableList<CachedArticlesEntity>
-            runBlocking {
-                articles = dao.getAllCachedArticles(category) ?: mutableListOf()
-            }
-            if (articles.isNotEmpty()) {
-                val newsItems = converterToNewsItem(articles)
-                if (selectedFilterBtn == btn) changeColorOfBtn(selectedFilterBtn, true)
-                changeColorOfBtn(btn, false)
-                dashboardRecyclerAdapter =
-                    DashboardRecyclerAdapter(activity as Context, newsItems)
-                rvDashboard.adapter = dashboardRecyclerAdapter
-            } else {
-                buttonHandler(btn, selectedFilterBtn, queue, category)
-                backgroundDBOperations(category, dao)
-            }
+            pbDashboard.visibility = View.GONE
+            rvDashboard.visibility = View.VISIBLE
         }
-        return btn
+//            backgroundDBOperations(category, dao)
+//        } else {
+//            var articles = mutableListOf<CachedArticlesEntity>()
+//            val job1 = CoroutineScope(Dispatchers.IO).launch{
+//                articles = dao.getAllCachedArticles(category) ?: mutableListOf()
+//            }
+//            val job2 = CoroutineScope(Dispatchers.Main).launch {
+//                if (articles.isNotEmpty()) {
+//                    pbDashboard.visibility = View.GONE
+//                    rvDashboard.visibility = View.VISIBLE
+//                    val newsItems = converterToNewsItem(articles)
+//                    if (selectedFilterBtn == btn) changeColorOfBtn(selectedFilterBtn, true)
+//                    changeColorOfBtn(btn, false)
+//                    dashboardRecyclerAdapter =
+//                        DashboardRecyclerAdapter(activity as Context, newsItems)
+//                    rvDashboard.adapter = dashboardRecyclerAdapter
+//                } else {
+//                    buttonHandler(btn, selectedFilterBtn, queue, category)
+////                    backgroundDBOperations(category, dao)
+//                }
+//            }
+//            runBlocking {
+//                job1.join()
+//                job2.join()
+//            }
+//        }
+            return btn
     }
 }
