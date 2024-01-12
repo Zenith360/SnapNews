@@ -15,6 +15,7 @@ import android.widget.HorizontalScrollView
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.ScrollView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,23 +28,15 @@ import com.android.volley.toolbox.Volley
 import com.justme.snapnews.R
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDB
 import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesDao
-import com.justme.snapnews.data.db.cachedarticlesdb.CachedArticlesEntity
 import com.justme.snapnews.data.models.NewsItem
 import com.justme.snapnews.ui.adapters.DashboardRecyclerAdapter
 import com.justme.snapnews.util.URL
-import com.justme.snapnews.util.converterToCachedArticlesEntity
-import com.justme.snapnews.util.converterToNewsItem
 import com.justme.snapnews.util.isConnectedToInternet
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import java.util.Locale
 
 class DashboardFragment : Fragment() {
-    private lateinit var svDashboard: ScrollView
     private lateinit var rlDashboard: RelativeLayout
     private lateinit var rvDashboard: RecyclerView
     private lateinit var pbDashboard: ProgressBar
@@ -64,11 +57,10 @@ class DashboardFragment : Fragment() {
     private lateinit var btnFilterTourism: Button
     private lateinit var btnFilterWorld: Button
     private lateinit var rvTopNews: RecyclerView
-    private lateinit var pbEntireDashboard : ProgressBar
-    private lateinit var rlBottomNews : RelativeLayout
+    private lateinit var pbEntireDashboard: ProgressBar
+    private lateinit var txtTopTen: TextView
 
     private lateinit var layoutManager: LinearLayoutManager
-    private lateinit var dashboardRecyclerAdapter: DashboardRecyclerAdapter
 
     private val tag = "DashboardFragment"
     private var futureArticles = mutableListOf<NewsItem>()
@@ -82,7 +74,6 @@ class DashboardFragment : Fragment() {
         val sharedPreferences =
             requireContext().getSharedPreferences("snapnewsCache", Context.MODE_PRIVATE)
 
-        svDashboard = view.findViewById(R.id.svDashboard)
         rlDashboard = view.findViewById(R.id.rlDashboard)
         rvDashboard = view.findViewById(R.id.rvDashboard)
         pbDashboard = view.findViewById(R.id.pbDashboard)
@@ -104,6 +95,7 @@ class DashboardFragment : Fragment() {
         btnFilterWorld = view.findViewById(R.id.btnFilterWorld)
         rvTopNews = view.findViewById(R.id.rvTopNews)
         pbEntireDashboard = view.findViewById(R.id.pbEntireDashboard)
+        txtTopTen = view.findViewById(R.id.txtTopNews)
 
         layoutManager = LinearLayoutManager(activity as Context)
 
@@ -129,8 +121,6 @@ class DashboardFragment : Fragment() {
         val dao = db.cachedArticlesDao()
 
         addToQueue("top", queue, rvTopNews)
-        pbEntireDashboard.visibility = View.GONE
-        svDashboard.visibility = View.VISIBLE
 //        backgroundDBOperations("top", dao)
 
         selectedBtn = btnClick(btnFilterTechnology, selectedBtn, dao, queue, timeCheck)
@@ -233,6 +223,15 @@ class DashboardFragment : Fragment() {
                 val jsonObjectRequest = object :
                     JsonObjectRequest(Method.GET, url, null, Response.Listener { jsonObj ->
                         if (jsonObj.getString("status") == "success") {
+                            if (category == "top") {
+                                pbEntireDashboard.visibility = View.GONE
+                                rvTopNews.visibility = View.VISIBLE
+                            } else {
+                                pbDashboard.visibility = View.GONE
+                                rvDashboard.visibility = View.VISIBLE
+                                hsvFilterButtons.visibility = View.VISIBLE
+                                txtTopTen.visibility = View.VISIBLE
+                            }
                             val articles = jsonObj.getJSONArray("results")
                             for (i in 0 until articles.length()) {
                                 val article = articles.getJSONObject(i)
@@ -251,7 +250,8 @@ class DashboardFragment : Fragment() {
                                 newsArticles.add(newsItem)
                             }
                             futureArticles = newsArticles
-                            recycler.adapter = DashboardRecyclerAdapter(activity as Context, newsArticles)
+                            recycler.adapter =
+                                DashboardRecyclerAdapter(activity as Context, newsArticles)
                         } else {
                             Toast.makeText(
                                 activity as Context,
@@ -298,7 +298,10 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun changeColorOfBtn(btn: Button, isSelectedBtn: Boolean) { //TODO: change changeBtnColor so that the selected button check is removed as selected button will always be changed
+    private fun changeColorOfBtn(
+        btn: Button,
+        isSelectedBtn: Boolean
+    ) { //TODO: change changeBtnColor so that the selected button check is removed as selected button will always be changed
         if (!isSelectedBtn) {
             btn.setBackgroundColor(resources.getColor(R.color.white, null))
             btn.setTextColor(resources.getColor(R.color.black, null))
@@ -325,11 +328,9 @@ class DashboardFragment : Fragment() {
         timeCheck: Boolean
     ): Button {
         val category = btn.text.toString().lowercase(Locale.getDefault())
-        if (true) {
-            buttonHandler(btn, selectedFilterBtn, queue, category)
-            pbDashboard.visibility = View.GONE
-            rvDashboard.visibility = View.VISIBLE
-        }
+        pbDashboard.visibility = View.VISIBLE
+        rvDashboard.visibility = View.INVISIBLE
+        buttonHandler(btn, selectedFilterBtn, queue, category)
 //            backgroundDBOperations(category, dao)
 //        } else {
 //            var articles = mutableListOf<CachedArticlesEntity>()
@@ -356,6 +357,6 @@ class DashboardFragment : Fragment() {
 //                job2.join()
 //            }
 //        }
-            return btn
+        return btn
     }
 }

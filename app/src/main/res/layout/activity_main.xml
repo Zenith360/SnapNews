@@ -46,23 +46,11 @@
 
     </LinearLayout>
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txtTopTen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/placeholder_top_ten"
-        android:textSize="30sp"
-        android:textColor="@color/white"
-        android:textStyle="bold"
-        android:layout_below="@id/llMainAc"
-        android:layout_marginTop="15dp"
-        android:layout_marginStart="10dp"/>
-
     <FrameLayout
         android:id="@+id/flFrame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/txtTopTen"
+        android:layout_below="@id/llMainAc"
         android:layout_marginTop="15dp" />
 
 </RelativeLayout>
