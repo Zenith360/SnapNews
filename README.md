@@ -1,30 +1,37 @@
 # SnapNews - Your Go-To News App
 
-Welcome to SnapNews, your ultimate Android news app that combines streamlined article fetching with user-friendly topic filtering for a seamless news reading experience.
+Welcome to SnapNews, an Android news app that offers streamlined article fetching and user-friendly topic filtering.
 
 ## Features
 
-1. **Efficient Article Fetching**: SnapNews is designed to deliver news articles to you swiftly and efficiently. With optimized network operations using Volley, the app ensures quick and responsive article retrieval.
+1. **Efficient Article Fetching**: Quick and responsive news article retrieval using optimized network operations with Volley.
 
-2. **User-Friendly Topic Filtering**: We understand that your time is valuable. That's why SnapNews offers intuitive and user-friendly topic filtering, allowing you to tailor your news feed to your interests effortlessly.
+2. **User-Friendly Topic Filtering**: Easily customize your news feed based on your interests with an intuitive and user-friendly topic filtering system.
 
-3. **Coroutines for Smooth Data Handling**: Behind the scenes, SnapNews leverages coroutines for efficient Room database operations. This not only enhances the app's performance but also ensures seamless handling of news data.
+3. **Coroutines for Smooth Data Handling**: Seamless data handling with the application of coroutines for efficient Room database operations.
 
-4. **Bookmark Your Favorites**: SnapNews lets you save your favorite articles directly on your device. Utilizing Room and Kotlin coroutines, the app enables you to effortlessly bookmark articles for later reading. Your bookmarks are securely stored, providing you with easy access to the news that matters to you.
+4. **Bookmark Your Favorites**: Save and organize your preferred articles directly on your device. Utilizes Room and Kotlin coroutines for smooth and secure bookmarking.
+
+## NewsData API Integration
+
+SnapNews leverages the **NewsData API** to fetch the latest news articles, ensuring a diverse and up-to-date news feed for users.
 
 ## How it Works
 
-SnapNews uses a combination of cutting-edge technologies to provide you with the best news-reading experience:
+SnapNews utilizes cutting-edge technologies for an enhanced news-reading experience:
 
-- **Volley for Network Operations**: The app utilizes Volley, a powerful networking library for Android, to optimize the retrieval of news articles. This translates to a smoother and more responsive user experience.
+- **Volley for Network Operations**: Optimized news article retrieval with the powerful networking library for Android, Volley.
 
-- **Coroutines for Database Operations**: SnapNews employs coroutines to perform Room database operations efficiently. This asynchronous programming model ensures that the app handles data seamlessly, providing you with a reliable and fast news browsing experience.
+- **Coroutines for Database Operations**: Efficient Room database operations with the use of coroutines, ensuring smooth data handling.
 
-- **Bookmarking with Room and Kotlin Coroutines**: Save and organize your favorite articles effortlessly. SnapNews employs Room and Kotlin coroutines to enable smooth and secure bookmarking directly on your device.
+- **Bookmarking with Room and Kotlin Coroutines**: Securely save and organize your favorite articles directly on your device.
 
+## Installation
+
+To start using SnapNews, build it on your phone through android studio and you are ready to go!
 
 ## Feedback
 
-We value your feedback! If you encounter any issues, have suggestions for improvement, or want to share your thoughts, please don't hesitate to reach out to us. Your input is essential in helping us make SnapNews the best news app for you.
+We value your feedback! If you encounter issues or have suggestions, please reach out. Your input is crucial in making SnapNews the best news app for you.
 
 Happy reading with SnapNews! 📰
