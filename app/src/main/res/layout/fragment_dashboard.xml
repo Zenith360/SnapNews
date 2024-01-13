@@ -17,7 +17,7 @@
             android:layout_marginStart="5dp"
             android:text="@string/placeholder_top_ten"
             android:textColor="@color/white"
-            android:textSize="37sp"
+            android:textSize="25sp"
             android:textStyle="bold"
             android:visibility="invisible" />
 
@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/txtTopNews"
             android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="10dp"
             android:visibility="invisible" />
 
         <ProgressBar

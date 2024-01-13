@@ -61,7 +61,7 @@ class DashboardRecyclerAdapter(
         val dao = db.bookmarkDAO()
 
         holder.imgBookmark.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
+            CoroutineScope(Dispatchers.IO).launch {
                 val bookmark = converterToBookmarkEntity(data)
                 if (data.isBookmarked) {
                     data.isBookmarked = false

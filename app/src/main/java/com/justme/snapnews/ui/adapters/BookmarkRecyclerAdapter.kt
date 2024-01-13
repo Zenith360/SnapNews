@@ -50,10 +50,7 @@ class BookmarkRecyclerAdapter(
         else
             holder.txtDescription.text = data.description
         Picasso.get().load(data.image_url).error(R.drawable.garden_test).into(holder.imgNewsImage)
-        if (data.isBookmarked)
-            holder.imgBookmark.setImageResource(R.drawable.ic_bookmark_filled)
-        else
-            holder.imgBookmark.setImageResource(R.drawable.ic_bookmark_outline)
+        holder.imgBookmark.setImageResource(R.drawable.ic_bookmark_filled)
 
         val db = Room.databaseBuilder(context, BookmarkDB::class.java, "bookmarks").build()
         val dao = db.bookmarkDAO()

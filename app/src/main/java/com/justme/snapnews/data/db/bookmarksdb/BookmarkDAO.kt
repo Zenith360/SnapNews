@@ -11,7 +11,7 @@ interface BookmarkDAO {
     fun insertInBookmarks(bookmarkEntity: BookmarkEntity)
 
     @Query("SELECT * FROM bookmarks")
-    fun getAllBookmarks() : List<BookmarkEntity>
+    fun getAllBookmarks() : MutableList<BookmarkEntity>
 
     @Delete
     fun deleteFromBookmarks(bookmarkEntity: BookmarkEntity)

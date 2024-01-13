@@ -40,9 +40,8 @@ dependencies {
 
     val roomVer = "2.6.1"
 
-    implementation("androidx.room:room-runtime:$roomVer")
     ksp("androidx.room:room-compiler:$roomVer")
-
+    implementation("androidx.room:room-runtime:$roomVer")
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
@@ -51,7 +50,6 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.8")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.6")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.6")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

@@ -10,6 +10,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.justme.snapnews.R
+import com.justme.snapnews.ui.fragments.BookmarksFragment
 import com.justme.snapnews.ui.fragments.DashboardFragment
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -49,9 +50,9 @@ class MainActivity : AppCompatActivity() {
             fragmentView(sfm, DashboardFragment())
         }
 
-//        imgBookmarkMainAc.setOnClickListener {
-//            fragmentView(sfm, BookmarkFragment())
-//        }
+        imgBookmarkMainAc.setOnClickListener {
+            fragmentView(sfm, BookmarksFragment())
+        }
     }
 
     override fun onDestroy() {
