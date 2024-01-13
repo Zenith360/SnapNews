@@ -12,7 +12,6 @@ import androidx.room.Room
 import com.justme.snapnews.R
 import com.justme.snapnews.data.db.bookmarksdb.BookmarkDB
 import com.justme.snapnews.data.db.bookmarksdb.BookmarkEntity
-import com.justme.snapnews.util.converterToBookmarkEntity
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
