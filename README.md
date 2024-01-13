@@ -16,6 +16,16 @@ Welcome to SnapNews, an Android news app that offers streamlined article fetchin
 
 SnapNews leverages the **NewsData API** to fetch the latest news articles, ensuring a diverse and up-to-date news feed for users.
 
+## Topic Filtering
+
+SnapNews provides filtering options across 16 different topics, including but not limited to:
+- Technology
+- Politics
+- Domestic Affairs
+- and more...
+
+Customize your news feed to stay informed on the topics that matter to you the most.
+
 ## How it Works
 
 SnapNews utilizes cutting-edge technologies for an enhanced news-reading experience:
@@ -28,7 +38,7 @@ SnapNews utilizes cutting-edge technologies for an enhanced news-reading experie
 
 ## Installation
 
-To start using SnapNews, build it on your phone through android studio and you are ready to go!
+To start using SnapNews, build the file using Android Studio and install on your phone and you are ready to go!
 
 ## Feedback
 
