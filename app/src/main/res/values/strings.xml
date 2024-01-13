@@ -24,4 +24,5 @@
     <string name="filter_btn_tourism">Tourism</string>
     <string name="filter_btn_world">World</string>
     <string name="filter_btn_environment">Environment</string>
+    <string name="placeholder_bookmark">Here are your bookmarks!</string>
 </resources>

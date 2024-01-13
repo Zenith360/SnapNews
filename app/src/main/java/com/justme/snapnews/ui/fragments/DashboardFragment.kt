@@ -328,8 +328,8 @@ class DashboardFragment : Fragment() {
         timeCheck: Boolean
     ): Button {
         val category = btn.text.toString().lowercase(Locale.getDefault())
-        pbDashboard.visibility = View.VISIBLE
         rvDashboard.visibility = View.INVISIBLE
+        pbDashboard.visibility = View.VISIBLE
         buttonHandler(btn, selectedFilterBtn, queue, category)
 //            backgroundDBOperations(category, dao)
 //        } else {

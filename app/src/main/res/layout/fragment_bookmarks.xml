@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.BookmarksFragment">
+
+    <RelativeLayout
+        android:id="@+id/rlBookmarks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/txtBookmark"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="2dp"
+            android:text="@string/placeholder_bookmark"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvBookmarks"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtBookmark"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="5dp" />
+
+    </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/pbBookmarks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleX="0.2"
+        android:scaleY="0.2"
+        android:visibility="visible" />
+
+</FrameLayout>
