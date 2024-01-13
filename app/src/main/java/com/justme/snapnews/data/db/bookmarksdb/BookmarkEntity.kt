@@ -15,5 +15,5 @@ data class BookmarkEntity(
     @ColumnInfo(name = "description") val description: String?,
     @ColumnInfo(name = "image_url") val image_url: String,
     @ColumnInfo(name = "source_id") val source_id: String,
-    @ColumnInfo(name = "isBookmarked") val isBookmarked: Boolean
+    @ColumnInfo(name = "isBookmarked") var isBookmarked: Boolean
 )
